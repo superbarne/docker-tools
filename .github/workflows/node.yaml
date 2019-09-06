@@ -27,4 +27,4 @@ jobs:
     - name: Push docker image
       env:
         COMMIT: ${{ github.sha }}
-      run: docker push docker.pkg.github.com/superbarne/docker-tools/node:$COMMIT
+      run: docker push docker.pkg.github.com/superbarne/docker-tools/node:${COMMIT:0:7}

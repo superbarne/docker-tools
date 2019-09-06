@@ -18,9 +18,12 @@ jobs:
     - name: Login to github docker repository
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COMMIT: ${{ github.sha }}
-      run: docker login docker.pkg.github.com -u superbarne -p $GITHUB_TOKEN
+      run: docker login docker.pkg.github.com -u superbarne -p ${GITHUB_TOKEN}
     - name: Build the Docker image
+      env:
+        COMMIT: ${{ github.sha }}
       run: cd node && docker build . --file Dockerfile --tag docker.pkg.github.com/superbarne/docker-tools/node:$COMMIT
     - name: Push docker image
+      env:
+        COMMIT: ${{ github.sha }}
       run: docker push docker.pkg.github.com/superbarne/docker-tools/node:$COMMIT

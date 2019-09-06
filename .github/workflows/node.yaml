@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'node/*'
+      - '.github/workflows/node.yaml'
 jobs:
 
   build:
@@ -14,9 +15,12 @@ jobs:
  
     steps:
     - uses: actions/checkout@v1
-    - name: Login
+    - name: Login to github docker repository
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COMMIT: ${{ github.sha }}
       run: docker login docker.pkg.github.com -u superbarne -p $GITHUB_TOKEN
     - name: Build the Docker image
-      run: cd node && docker build . --file Dockerfile --tag docker.pkg.github.com/superbarne/docker-tools/node:$(date +%s)
+      run: cd node && docker build . --file Dockerfile --tag docker.pkg.github.com/superbarne/docker-tools/node:$COMMIT
+    - name: Push docker image
+      run: docker push docker.pkg.github.com/superbarne/docker-tools/node:$COMMIT

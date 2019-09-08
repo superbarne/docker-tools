@@ -25,7 +25,7 @@ async function main() {
       subdirectory
     } = argv
 
-
+    console.log('argv', argv)
     let kubernetes;
 
     if(kubernetesKey && kubernetesCertificate && kubernetesHost) {

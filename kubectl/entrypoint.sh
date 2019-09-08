@@ -25,4 +25,4 @@ users:
     client-key-data: $CLIENT_KEY
 EOF
 
-exec "$@
+exec "$@""

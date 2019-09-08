@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: imagebuilder-github-praecura-api-10
+  namespace: jenkins
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 172800
+  template:
+    spec:
+      restartPolicy: Never
+      initContainers:
+      - name: provisioner
+        image: alpine/git:1.0.7
+        args:
+        - clone 
+        - '[placeholder]'
+        - /makisu-context
+        volumeMounts:
+        - name: context
+          mountPath: /makisu-context
+      containers:
+      - name: makisu
+        image: gcr.io/makisu-project/makisu:v0.1.11
+        imagePullPolicy: IfNotPresent
+        args: []
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "1"
+        volumeMounts:
+        - name: context
+          mountPath: /makisu-context
+        - name: registry-config
+          mountPath: /registry-config
+        - name: storage
+          mountPath: /makisu-storage
+      volumes:
+      - name: context
+        emptyDir: {}
+      - name: registry-config
+        secret:
+          secretName: docker-registry-config
+      - name: storage
+        persistentVolumeClaim:
+          claimName: makisu

@@ -1,4 +1,4 @@
-FROM astefanutti/scratch-node as node
+FROM astefanutti/scratch-node:12.6.0 as node
 FROM alpine as alpine
 RUN apk add upx
 

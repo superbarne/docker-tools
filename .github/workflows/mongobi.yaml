@@ -1,0 +1,27 @@
+name: Mongobi Docker Image
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'mongobi/*'
+      - '.github/workflows/mongobi.yaml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Login to github docker repository
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: docker login docker.pkg.github.com -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+    - name: Build the Docker image
+      env:
+        COMMIT: ${{ github.sha }}
+      run: cd mongobi && docker build . --file Dockerfile --tag docker.pkg.github.com/superbarne/docker-tools/mongobi:${COMMIT:0:7}
+    - name: Push docker image
+      env:
+        COMMIT: ${{ github.sha }}
+      run: docker push docker.pkg.github.com/superbarne/docker-tools/mongobi:${COMMIT:0:7}

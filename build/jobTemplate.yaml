@@ -42,5 +42,4 @@ spec:
         secret:
           secretName: docker-registry-config
       - name: storage
-        persistentVolumeClaim:
-          claimName: makisu
+        emptyDir: {}
